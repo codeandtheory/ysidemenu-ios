@@ -1,5 +1,5 @@
 //
-//  SideMenuView.swift
+//  SideMenuController.swift
 //  YSideMenu
 //
 //  Created by Dev Karan on 14/04/23.
@@ -7,7 +7,7 @@
 //
 
 /// A view that represents a `SideMenu`.
-public struct SideMenuView {
+public struct SideMenuController {
     /// Sample text.
     public private(set) var text = "Hello, World!"
 

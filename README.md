@@ -16,7 +16,7 @@ Usage
 Dependencies
 ----------
 
-Y—SideMenu depends upon our [Y—CoreUI](https://github.com/yml-org/ycoreui) and [Y—MatterType](https://github.com/yml-org/ymattertype) frameworks (both also open source and Apache 2.0 licensed).
+Y—SideMenu depends upon our [Y—CoreUI](https://github.com/yml-org/ycoreui)framework (which is also open source and Apache 2.0 licensed).
 
 Installation
 ----------

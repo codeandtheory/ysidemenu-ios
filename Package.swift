@@ -17,16 +17,12 @@ let package = Package(
         .package(
             url: "https://github.com/yml-org/YCoreUI.git",
             from: "1.7.0"
-        ),
-        .package(
-            url: "https://github.com/yml-org/YMatterType.git",
-            from: "1.6.0"
         )
     ],
     targets: [
         .target(
             name: "YSideMenu",
-            dependencies: ["YCoreUI", "YMatterType"]
+            dependencies: ["YCoreUI"]
         ),
         .testTarget(
             name: "YSideMenuTests",
