@@ -3,7 +3,7 @@
 //  YSideMenu
 //
 //  Created by Dev Karan on 14/04/23.
-//  Copyright © 2021 Y Media Labs. All rights reserved.
+//  Copyright © 2023 Y Media Labs. All rights reserved.
 //
 
 import XCTest
