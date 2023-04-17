@@ -1,4 +1,4 @@
-# ysidemenu-ios
+![Y—SideMenu](https://user-images.githubusercontent.com/1037520/232458793-f0765475-5100-48ad-9d8c-af2e9b53bd5d.jpeg)
 _Accessible and customizable side menu for iOS._
 
 Licensing
