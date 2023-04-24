@@ -10,7 +10,6 @@ import UIKit
 
 /// A view controller  that represents a `SideMenu`.
 public class SideMenuController: UIViewController {
-
     private var contentView: UIView!
     private var dimView: UIView!
     private var menuWidth: CGFloat = Constants.defaultMenuWidth
@@ -21,7 +20,7 @@ public class SideMenuController: UIViewController {
     private enum Constants {
         static let defaultDimOpacity: CGFloat = 0.3
         static let animationDuration: CGFloat = 0.3
-        static let defaultCloseButtonImage: UIImage = UIImage(systemName: "xmark")!
+        static let defaultCloseButtonImage: UIImage = UIImage(systemName: "xmark") ?? UIImage()
         static let defaultCloseButtonMargin: CGFloat = 16
         static let defaultMenuWidth: CGFloat = 250
     }
@@ -33,8 +32,7 @@ public class SideMenuController: UIViewController {
         self.additionalContent = content
     }
 
-    private func setupPresentation()
-    {
+    private func setupPresentation() {
         // Modal configuration
         modalPresentationStyle = .overFullScreen
     }
@@ -45,7 +43,6 @@ public class SideMenuController: UIViewController {
     }
 
     private func configureLayout() {
-
         // Create content view
         contentView = UIView(frame: CGRect(x: .zero, y: .zero, width: menuWidth, height: view.bounds.height))
         contentView.backgroundColor = .white
@@ -56,8 +53,14 @@ public class SideMenuController: UIViewController {
         closeButton.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
         contentView.addSubview(closeButton)
         closeButton.translatesAutoresizingMaskIntoConstraints = false
-        closeButton.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: Constants.defaultCloseButtonMargin).isActive = true
-        closeButton.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: Constants.defaultCloseButtonMargin).isActive = true
+        closeButton.topAnchor.constraint(
+            equalTo: contentView.safeAreaLayoutGuide.topAnchor,
+                                         constant: Constants.defaultCloseButtonMargin
+        ).isActive = true
+        closeButton.leadingAnchor.constraint(
+            equalTo: contentView.safeAreaLayoutGuide.leadingAnchor,
+                                             constant: Constants.defaultCloseButtonMargin
+        ).isActive = true
 
         // Create dim view
         dimView = UIView(frame: view.bounds)
@@ -70,15 +73,17 @@ public class SideMenuController: UIViewController {
         view.addSubview(contentView)
 
         // Add additional content
-        if let additionalContent
-        {
+        if let additionalContent {
             contentView.addSubview(additionalContent)
             additionalContent.translatesAutoresizingMaskIntoConstraints = false
             NSLayoutConstraint.activate([
                 additionalContent.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
                 additionalContent.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
                 additionalContent.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor),
-                additionalContent.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: Constants.defaultCloseButtonMargin)
+                additionalContent.topAnchor.constraint(
+                    equalTo: closeButton.bottomAnchor,
+                                                       constant: Constants.defaultCloseButtonMargin
+                                                      )
             ])
         }
 
@@ -97,8 +102,10 @@ public class SideMenuController: UIViewController {
     // MARK: - Public Methods
 
     public func present() {
-        rootViewController.present(self, animated: false)
-        {
+        rootViewController.present(
+            self,
+                                   animated: false
+        ) {
             UIView.animate(withDuration: Constants.animationDuration) {
                 self.dimView.alpha = Constants.defaultDimOpacity
                 self.contentView.frame.origin.x = .zero
@@ -107,12 +114,16 @@ public class SideMenuController: UIViewController {
     }
 
     public func close() {
-        UIView.animate(withDuration: Constants.animationDuration, animations: {
+        UIView.animate(
+            withDuration: Constants.animationDuration,
+                       animations: {
             self.dimView.alpha = .zero
             self.contentView.frame.origin.x = -self.menuWidth
-        }, completion: { [weak self] _ in
+        },
+        completion: { [weak self] _ in
             self?.dismiss(animated: false)
-        })
+        }
+        )
     }
 
     public func setMenuWidth(_ width: CGFloat) {
@@ -124,5 +135,4 @@ public class SideMenuController: UIViewController {
     public func setBackgroundOpacity(_ opacity: CGFloat) {
         dimView.backgroundColor = UIColor.black.withAlphaComponent(opacity)
     }
-
 }
