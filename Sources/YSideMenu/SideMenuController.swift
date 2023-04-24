@@ -7,29 +7,31 @@
 //
 
 import UIKit
+import YCoreUI
 
 /// A view controller  that represents a `SideMenu`.
 public class SideMenuController: UIViewController {
-    private var contentView: UIView!
-    private var dimView: UIView!
+    private let contentView: UIView = UIView()
+    private var dimmerView: UIView = UIView()
     private var menuWidth: CGFloat = Constants.defaultMenuWidth
-    private var closeButton: UIButton!
-    private var rootViewController: UIViewController!
-    private var additionalContent: UIView?
+    public var rootViewController: UIViewController!
 
     private enum Constants {
-        static let defaultDimOpacity: CGFloat = 0.3
+        static let defaultDimmerOpacity: CGFloat = 0.3
         static let animationDuration: CGFloat = 0.3
-        static let defaultCloseButtonImage: UIImage = UIImage(systemName: "xmark") ?? UIImage()
-        static let defaultCloseButtonMargin: CGFloat = 16
         static let defaultMenuWidth: CGFloat = 250
+        static let maximumWidth: CGFloat = 414
+        static var idealWidthPercentage: CGFloat = 0.8
     }
 
-    public convenience init(rootViewController: UIViewController, content: UIView?) {
-        self.init()
+    // :nodoc:
+    internal required init?(coder: NSCoder) { nil }
+
+    public required init(rootViewController: UIViewController) {
+        super.init(nibName: nil, bundle: nil)
         setupPresentation()
         self.rootViewController = rootViewController
-        self.additionalContent = content
+        addChild(rootViewController)
     }
 
     private func setupPresentation() {
@@ -43,49 +45,30 @@ public class SideMenuController: UIViewController {
     }
 
     private func configureLayout() {
-        // Create content view
-        contentView = UIView(frame: CGRect(x: .zero, y: .zero, width: menuWidth, height: view.bounds.height))
-        contentView.backgroundColor = .white
-
-        // Create close button
-        closeButton = UIButton(type: .system)
-        closeButton.setImage(Constants.defaultCloseButtonImage, for: .normal)
-        closeButton.addTarget(self, action: #selector(didTapCloseButton), for: .touchUpInside)
-        contentView.addSubview(closeButton)
-        closeButton.translatesAutoresizingMaskIntoConstraints = false
-        closeButton.topAnchor.constraint(
-            equalTo: contentView.safeAreaLayoutGuide.topAnchor,
-                                         constant: Constants.defaultCloseButtonMargin
-        ).isActive = true
-        closeButton.leadingAnchor.constraint(
-            equalTo: contentView.safeAreaLayoutGuide.leadingAnchor,
-                                             constant: Constants.defaultCloseButtonMargin
-        ).isActive = true
-
-        // Create dim view
-        dimView = UIView(frame: view.bounds)
-        dimView.backgroundColor = UIColor.black
-        dimView.alpha = Constants.defaultDimOpacity
-        dimView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapDimView)))
-
         // Add views to view hierarchy
-        view.addSubview(dimView)
+        view.addSubview(dimmerView)
         view.addSubview(contentView)
+        dimmerView.constrainEdges()
+        contentView.constrainEdges(.notTrailing)
+        contentView.backgroundColor = .systemBackground
 
-        // Add additional content
-        if let additionalContent {
-            contentView.addSubview(additionalContent)
-            additionalContent.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                additionalContent.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-                additionalContent.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-                additionalContent.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor),
-                additionalContent.topAnchor.constraint(
-                    equalTo: closeButton.bottomAnchor,
-                                                       constant: Constants.defaultCloseButtonMargin
-                                                      )
-            ])
-        }
+        // Add rootViewController
+        contentView.addSubview(rootViewController.view)
+        rootViewController.view.constrainEdges()
+        rootViewController.didMove(toParent: self)
+
+        // Setup dimmer view
+        dimmerView.backgroundColor = UIColor.black
+        dimmerView.alpha = Constants.defaultDimmerOpacity
+        dimmerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapDimView)))
+
+        contentView.constrain(
+            .widthAnchor,
+                                                    to: view.widthAnchor,
+                                                    multiplier: Constants.idealWidthPercentage,
+                                                    priority: .defaultHigh
+        )
+        contentView.constrain(.widthAnchor, constant: Constants.maximumWidth)
 
         // Position content view off-screen
         contentView.frame.origin.x = -menuWidth
@@ -107,7 +90,7 @@ public class SideMenuController: UIViewController {
                                    animated: false
         ) {
             UIView.animate(withDuration: Constants.animationDuration) {
-                self.dimView.alpha = Constants.defaultDimOpacity
+                self.dimmerView.alpha = Constants.defaultDimmerOpacity
                 self.contentView.frame.origin.x = .zero
             }
         }
@@ -117,7 +100,7 @@ public class SideMenuController: UIViewController {
         UIView.animate(
             withDuration: Constants.animationDuration,
                        animations: {
-            self.dimView.alpha = .zero
+            self.dimmerView.alpha = .zero
             self.contentView.frame.origin.x = -self.menuWidth
         },
         completion: { [weak self] _ in
@@ -133,6 +116,6 @@ public class SideMenuController: UIViewController {
     }
 
     public func setBackgroundOpacity(_ opacity: CGFloat) {
-        dimView.backgroundColor = UIColor.black.withAlphaComponent(opacity)
+        dimmerView.backgroundColor = UIColor.black.withAlphaComponent(opacity)
     }
 }
