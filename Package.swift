@@ -26,10 +26,7 @@ let package = Package(
         ),
         .testTarget(
             name: "YSideMenuTests",
-            dependencies: ["YSideMenu"],
-            plugins: [
-                        .plugin(name: "SwiftLint", package: "SwiftLintPlugin")
-                    ]
+            dependencies: ["YSideMenu"]
         )
     ]
 )
