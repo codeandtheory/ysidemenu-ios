@@ -28,9 +28,9 @@ public class SideMenuController: UIViewController {
     internal required init?(coder: NSCoder) { nil }
 
     public required init(rootViewController: UIViewController) {
+        self.rootViewController = rootViewController
         super.init(nibName: nil, bundle: nil)
         setupPresentation()
-        self.rootViewController = rootViewController
         addChild(rootViewController)
     }
 
