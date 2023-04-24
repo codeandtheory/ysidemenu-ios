@@ -14,7 +14,7 @@ public class SideMenuController: UIViewController {
     private let contentView: UIView = UIView()
     private var dimmerView: UIView = UIView()
     private var menuWidth: CGFloat = Constants.defaultMenuWidth
-    public var rootViewController: UIViewController!
+    public let rootViewController: UIViewController!
 
     private enum Constants {
         static let defaultDimmerOpacity: CGFloat = 0.5
