@@ -17,7 +17,7 @@ public class SideMenuController: UIViewController {
     public var rootViewController: UIViewController!
 
     private enum Constants {
-        static let defaultDimmerOpacity: CGFloat = 0.3
+        static let defaultDimmerOpacity: CGFloat = 0.5
         static let animationDuration: CGFloat = 0.3
         static let defaultMenuWidth: CGFloat = 250
         static let maximumWidth: CGFloat = 414
