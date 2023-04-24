@@ -16,6 +16,7 @@ public class SideMenuController: UIViewController {
     private var menuWidth: CGFloat = Constants.defaultMenuWidth
     private var closeButton: UIButton!
     private var rootViewController: UIViewController!
+    private var additionalContent: UIView?
 
     private enum Constants {
         static let defaultDimOpacity: CGFloat = 0.3
@@ -25,10 +26,11 @@ public class SideMenuController: UIViewController {
         static let defaultMenuWidth: CGFloat = 250
     }
 
-    public convenience init(rootViewController: UIViewController) {
+    public convenience init(rootViewController: UIViewController, content: UIView?) {
         self.init()
         setupPresentation()
         self.rootViewController = rootViewController
+        self.additionalContent = content
     }
 
     private func setupPresentation()
@@ -43,6 +45,7 @@ public class SideMenuController: UIViewController {
     }
 
     private func configureLayout() {
+
         // Create content view
         contentView = UIView(frame: CGRect(x: .zero, y: .zero, width: menuWidth, height: view.bounds.height))
         contentView.backgroundColor = .white
@@ -65,6 +68,19 @@ public class SideMenuController: UIViewController {
         // Add views to view hierarchy
         view.addSubview(dimView)
         view.addSubview(contentView)
+
+        // Add additional content
+        if let additionalContent
+        {
+            contentView.addSubview(additionalContent)
+            additionalContent.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                additionalContent.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+                additionalContent.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+                additionalContent.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor),
+                additionalContent.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: Constants.defaultCloseButtonMargin)
+            ])
+        }
 
         // Position content view off-screen
         contentView.frame.origin.x = -menuWidth
@@ -107,10 +123,6 @@ public class SideMenuController: UIViewController {
 
     public func setBackgroundOpacity(_ opacity: CGFloat) {
         dimView.backgroundColor = UIColor.black.withAlphaComponent(opacity)
-    }
-
-    public func addMenuItem(_ item: UIView) {
-        contentView.addSubview(item)
     }
 
 }
