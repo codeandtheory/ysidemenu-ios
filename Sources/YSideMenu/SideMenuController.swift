@@ -13,13 +13,13 @@ import YCoreUI
 public class SideMenuController: UIViewController {
     private let contentView: UIView = UIView()
     private var dimmerView: UIView = UIView()
-    private var menuWidth: CGFloat = Constants.defaultMenuWidth
     public let rootViewController: UIViewController!
+    private var idealWidthAnchor: NSLayoutConstraint?
+    private var maximumWidthAnchor: NSLayoutConstraint?
 
     private enum Constants {
         static let defaultDimmerOpacity: CGFloat = 0.5
         static let animationDuration: CGFloat = 0.3
-        static let defaultMenuWidth: CGFloat = 250
         static let maximumWidth: CGFloat = 414
         static var idealWidthPercentage: CGFloat = 0.8
     }
@@ -41,81 +41,58 @@ public class SideMenuController: UIViewController {
 
     public override func viewDidLoad() {
         super.viewDidLoad()
-        configureLayout()
+        build()
     }
 
-    private func configureLayout() {
-        // Add views to view hierarchy
+    @objc
+    private func didTapDimmerView() {
+        close()
+    }
+
+    @objc
+    private func didTapCloseButton() {
+        close()
+    }
+
+    private func close() {
+        dismiss(animated: true)
+    }
+}
+
+private extension SideMenuController {
+    private func build() {
+        buildViews()
+    }
+
+    private func buildViews() {
         view.addSubview(dimmerView)
         view.addSubview(contentView)
-        dimmerView.constrainEdges()
-        contentView.constrainEdges(.notTrailing)
-        contentView.backgroundColor = .systemBackground
-
-        // Add rootViewController
         contentView.addSubview(rootViewController.view)
-        rootViewController.view.constrainEdges()
         rootViewController.didMove(toParent: self)
+    }
 
-        // Setup dimmer view
-        dimmerView.backgroundColor = UIColor.black
-        dimmerView.alpha = Constants.defaultDimmerOpacity
-        dimmerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapDimView)))
-
-        contentView.constrain(
-            .widthAnchor,
+    private func buildConstraints() {
+        dimmerView.constrainEdges()
+        rootViewController.view.constrainEdges()
+        contentView.constrainEdges(.notTrailing)
+        idealWidthAnchor = contentView.constrain(
+                                                    .widthAnchor,
                                                     to: view.widthAnchor,
                                                     multiplier: Constants.idealWidthPercentage,
                                                     priority: .defaultHigh
         )
-        contentView.constrain(.widthAnchor, constant: Constants.maximumWidth)
 
-        // Position content view off-screen
-        contentView.frame.origin.x = -menuWidth
-    }
-
-    @objc private func didTapDimView() {
-        close()
-    }
-
-    @objc private func didTapCloseButton() {
-        close()
-    }
-
-    // MARK: - Public Methods
-
-    public func present() {
-        rootViewController.present(
-            self,
-                                   animated: false
-        ) {
-            UIView.animate(withDuration: Constants.animationDuration) {
-                self.dimmerView.alpha = Constants.defaultDimmerOpacity
-                self.contentView.frame.origin.x = .zero
-            }
-        }
-    }
-
-    public func close() {
-        UIView.animate(
-            withDuration: Constants.animationDuration,
-                       animations: {
-            self.dimmerView.alpha = .zero
-            self.contentView.frame.origin.x = -self.menuWidth
-        },
-        completion: { [weak self] _ in
-            self?.dismiss(animated: false)
-        }
+        maximumWidthAnchor = contentView.constrain(
+                                                    .widthAnchor,
+                                                    relatedBy: .lessThanOrEqual,
+                                                    constant: Constants.maximumWidth
         )
     }
 
-    public func setMenuWidth(_ width: CGFloat) {
-        menuWidth = width
-        contentView.frame.size.width = width
-        contentView.frame.origin.x = -width
-    }
-
-    public func setBackgroundOpacity(_ opacity: CGFloat) {
-        dimmerView.backgroundColor = UIColor.black.withAlphaComponent(opacity)
+    private func configureViews() {
+        dimmerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapDimmerView)))
+        contentView.backgroundColor = .systemBackground
+        dimmerView.backgroundColor = UIColor.black
+        dimmerView.alpha = Constants.defaultDimmerOpacity
     }
 }
