@@ -2,7 +2,7 @@
 //  SideMenuController.swift
 //  YSideMenu
 //
-//  Created by Dev Karan on 14/04/23.
+//  Created by Caio Coan on 14/04/23.
 //  Copyright © 2023 Y Media Labs. All rights reserved.
 //
 
@@ -11,34 +11,35 @@ import YCoreUI
 
 /// A view controller  that represents a `SideMenu`.
 public class SideMenuController: UIViewController {
-    private let contentView: UIView = UIView()
-    private var dimmerView: UIView = UIView()
-    public let rootViewController: UIViewController!
+    internal let contentView: UIView = UIView()
+    internal var dimmerView: UIView = UIView()
+    /// The child view controller to be displayed as a side menu
+    public let rootViewController: UIViewController
+
     private var idealWidthAnchor: NSLayoutConstraint?
     private var maximumWidthAnchor: NSLayoutConstraint?
 
     private enum Constants {
         static let defaultDimmerOpacity: CGFloat = 0.5
-        static let animationDuration: CGFloat = 0.3
         static let maximumWidth: CGFloat = 414
         static var idealWidthPercentage: CGFloat = 0.8
     }
 
-    // :nodoc:
-    internal required init?(coder: NSCoder) { nil }
+    /// :nodoc:
+    @available(*, unavailable)
+    required public init?(coder: NSCoder) {
+        fatalError("init(coder:) is not available for SideMenuController")
+    }
 
+    /// Initializes a side menu controller
+    /// - Parameter rootViewController: child view controller to be displayed as a side menu
     public required init(rootViewController: UIViewController) {
         self.rootViewController = rootViewController
         super.init(nibName: nil, bundle: nil)
         setupPresentation()
-        addChild(rootViewController)
     }
 
-    private func setupPresentation() {
-        // Modal configuration
-        modalPresentationStyle = .overFullScreen
-    }
-
+    /// :nodoc:
     public override func viewDidLoad() {
         super.viewDidLoad()
         build()
@@ -46,53 +47,65 @@ public class SideMenuController: UIViewController {
 
     @objc
     private func didTapDimmerView() {
-        close()
+        didDismiss()
     }
 
-    @objc
-    private func didTapCloseButton() {
-        close()
-    }
-
-    private func close() {
+    internal func didDismiss() {
         dismiss(animated: true)
     }
 }
 
 private extension SideMenuController {
-    private func build() {
-        buildViews()
+    func setupPresentation() {
+        // Modal configuration
+        modalPresentationStyle = .overFullScreen
     }
 
-    private func buildViews() {
+    func build() {
+        buildViews()
+        buildConstraints()
+        configureViews()
+    }
+
+    func buildViews() {
         view.addSubview(dimmerView)
         view.addSubview(contentView)
+        
+        addChild(rootViewController)
         contentView.addSubview(rootViewController.view)
         rootViewController.didMove(toParent: self)
     }
 
-    private func buildConstraints() {
+    func buildConstraints() {
         dimmerView.constrainEdges()
         rootViewController.view.constrainEdges()
         contentView.constrainEdges(.notTrailing)
         idealWidthAnchor = contentView.constrain(
-                                                    .widthAnchor,
-                                                    to: view.widthAnchor,
-                                                    multiplier: Constants.idealWidthPercentage,
-                                                    priority: .defaultHigh
+            .widthAnchor,
+            to: view.widthAnchor,
+            multiplier: Constants.idealWidthPercentage,
+            priority: .defaultHigh
         )
 
         maximumWidthAnchor = contentView.constrain(
-                                                    .widthAnchor,
-                                                    relatedBy: .lessThanOrEqual,
-                                                    constant: Constants.maximumWidth
+            .widthAnchor,
+            relatedBy: .lessThanOrEqual,
+            constant: Constants.maximumWidth
         )
     }
 
-    private func configureViews() {
+    func configureViews() {
         dimmerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapDimmerView)))
         contentView.backgroundColor = .systemBackground
         dimmerView.backgroundColor = UIColor.black
         dimmerView.alpha = Constants.defaultDimmerOpacity
+    }
+}
+
+// Methods for unit testing
+internal extension SideMenuController {
+    @objc
+    func simulateOnDimmerTap() {
+        didTapDimmerView()
     }
 }
