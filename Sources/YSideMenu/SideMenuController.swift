@@ -105,7 +105,9 @@ private extension SideMenuController {
         dimmerView.alpha = Constants.defaultDimmerOpacity
 
         contentView.backgroundColor = .systemBackground
-        contentView.addGestureRecognizer(UISwipeGestureRecognizer(target: self, action: #selector(didSwipeToDismiss)))
+        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(didSwipeToDismiss))
+        swipeGesture.direction = .left
+        contentView.addGestureRecognizer(swipeGesture)
     }
 }
 
