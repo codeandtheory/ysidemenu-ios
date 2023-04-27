@@ -50,6 +50,11 @@ public class SideMenuController: UIViewController {
         didDismiss()
     }
 
+    @objc
+    private func didSwipeToDismiss() {
+        didDismiss()
+    }
+
     internal func didDismiss() {
         dismiss(animated: true)
     }
@@ -96,9 +101,11 @@ private extension SideMenuController {
 
     func configureViews() {
         dimmerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapDimmerView)))
-        contentView.backgroundColor = .systemBackground
         dimmerView.backgroundColor = UIColor.black
         dimmerView.alpha = Constants.defaultDimmerOpacity
+
+        contentView.backgroundColor = .systemBackground
+        contentView.addGestureRecognizer(UISwipeGestureRecognizer(target: self, action: #selector(didSwipeToDismiss)))
     }
 }
 
@@ -107,5 +114,10 @@ internal extension SideMenuController {
     @objc
     func simulateOnDimmerTap() {
         didTapDimmerView()
+    }
+
+    @objc
+    func simulateSwipeToDismiss() {
+        didSwipeToDismiss()
     }
 }
