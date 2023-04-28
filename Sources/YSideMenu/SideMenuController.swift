@@ -45,8 +45,19 @@ public class SideMenuController: UIViewController {
         build()
     }
 
+    /// Performing the accessibility escape gesture dismisses the bottom sheet.
+    public override func accessibilityPerformEscape() -> Bool {
+        didDismiss()
+        return true
+    }
+
     @objc
     private func didTapDimmerView() {
+        didDismiss()
+    }
+
+    @objc
+    private func didSwipeToDismiss() {
         didDismiss()
     }
 
@@ -96,9 +107,13 @@ private extension SideMenuController {
 
     func configureViews() {
         dimmerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapDimmerView)))
-        contentView.backgroundColor = .systemBackground
         dimmerView.backgroundColor = UIColor.black
         dimmerView.alpha = Constants.defaultDimmerOpacity
+
+        contentView.backgroundColor = .systemBackground
+        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(didSwipeToDismiss))
+        swipeGesture.direction = .left
+        contentView.addGestureRecognizer(swipeGesture)
     }
 }
 
@@ -107,5 +122,10 @@ internal extension SideMenuController {
     @objc
     func simulateOnDimmerTap() {
         didTapDimmerView()
+    }
+
+    @objc
+    func simulateSwipeToDismiss() {
+        didSwipeToDismiss()
     }
 }

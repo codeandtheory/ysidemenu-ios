@@ -32,6 +32,29 @@ final class SideMenuControllerTests: XCTestCase {
         XCTAssertTrue(sut.onDimmerTapped)
         XCTAssertTrue(sut.isDismissed)
     }
+
+    func test_swipeMenu_dismissesSideMenu() {
+        let sut = makeSpy(rootViewController: UIViewController())
+        sut.loadViewIfNeeded()
+
+        XCTAssertFalse(sut.onMenuSwiped)
+        XCTAssertFalse(sut.isDismissed)
+
+        sut.simulateSwipeToDismiss()
+
+        XCTAssertTrue(sut.onMenuSwiped)
+        XCTAssertTrue(sut.isDismissed)
+    }
+
+    func test_performEscape_dismissesSideMenu() {
+        let sut = makeSpy(rootViewController: UIViewController())
+
+        XCTAssertFalse(sut.isDismissed)
+
+        _ = sut.accessibilityPerformEscape()
+
+        XCTAssertTrue(sut.isDismissed)
+    }
 }
 
 private extension SideMenuControllerTests {
@@ -59,6 +82,7 @@ private extension SideMenuControllerTests {
 final class SpySideMenuController: SideMenuController {
     var isDismissed = false
     var onDimmerTapped = false
+    var onMenuSwiped = false
 
     override func didDismiss() {
         super.didDismiss()
@@ -68,5 +92,10 @@ final class SpySideMenuController: SideMenuController {
     override func simulateOnDimmerTap() {
         super.simulateOnDimmerTap()
         onDimmerTapped = true
+    }
+
+    override func simulateSwipeToDismiss() {
+        super.simulateSwipeToDismiss()
+        onMenuSwiped = true
     }
 }
