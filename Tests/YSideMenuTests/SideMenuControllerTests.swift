@@ -45,6 +45,16 @@ final class SideMenuControllerTests: XCTestCase {
         XCTAssertTrue(sut.onMenuSwiped)
         XCTAssertTrue(sut.isDismissed)
     }
+
+    func test_performEscape_dismissesSideMenu() {
+        let sut = makeSpy(rootViewController: UIViewController())
+
+        XCTAssertFalse(sut.isDismissed)
+
+        _ = sut.accessibilityPerformEscape()
+
+        XCTAssertTrue(sut.isDismissed)
+    }
 }
 
 private extension SideMenuControllerTests {

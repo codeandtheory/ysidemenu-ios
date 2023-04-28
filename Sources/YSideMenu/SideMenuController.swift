@@ -45,6 +45,12 @@ public class SideMenuController: UIViewController {
         build()
     }
 
+    /// Performing the accessibility escape gesture dismisses the bottom sheet.
+    public override func accessibilityPerformEscape() -> Bool {
+        didDismiss()
+        return true
+    }
+
     @objc
     private func didTapDimmerView() {
         didDismiss()
