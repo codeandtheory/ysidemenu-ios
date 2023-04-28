@@ -55,6 +55,27 @@ final class SideMenuControllerTests: XCTestCase {
 
         XCTAssertTrue(sut.isDismissed)
     }
+    
+    func test_default_appearance() {
+        let sut = makeSpy(rootViewController: UIViewController())
+        sut.loadViewIfNeeded()
+
+        let defaultAppearance = SideMenuController.Appearance.default
+
+        XCTAssertEqual(sut.dimmerView.backgroundColor, defaultAppearance.dimmerColor)
+        XCTAssertLessThanOrEqual(sut.contentView.bounds.width, defaultAppearance.maximumWidth)
+    }
+
+    func test_change_appearance() {
+        let sut = makeSpy(rootViewController: UIViewController())
+        sut.loadViewIfNeeded()
+
+        let customAppearance = SideMenuController.Appearance(dimmerColor: .green, maximumWidth: 200)
+        sut.appearance = customAppearance
+
+        XCTAssertEqual(sut.dimmerView.backgroundColor, customAppearance.dimmerColor)
+        XCTAssertLessThanOrEqual(sut.contentView.bounds.width, customAppearance.maximumWidth)
+    }
 }
 
 private extension SideMenuControllerTests {

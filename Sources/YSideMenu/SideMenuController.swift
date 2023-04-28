@@ -15,15 +15,13 @@ public class SideMenuController: UIViewController {
     internal var dimmerView: UIView = UIView()
     /// The child view controller to be displayed as a side menu
     public let rootViewController: UIViewController
-
+    public var appearance: Appearance = Appearance.default {
+        didSet {
+            updateAppearance()
+        }
+    }
     private var idealWidthAnchor: NSLayoutConstraint?
     private var maximumWidthAnchor: NSLayoutConstraint?
-
-    private enum Constants {
-        static let defaultDimmerOpacity: CGFloat = 0.5
-        static let maximumWidth: CGFloat = 414
-        static var idealWidthPercentage: CGFloat = 0.8
-    }
 
     /// :nodoc:
     @available(*, unavailable)
@@ -78,6 +76,21 @@ private extension SideMenuController {
         configureViews()
     }
 
+    func updateAppearance() {
+        dimmerView.backgroundColor = appearance.dimmerColor
+        idealWidthAnchor = contentView.constrain(
+            .widthAnchor,
+            to: view.widthAnchor,
+            multiplier: appearance.idealWidthPercentage,
+            priority: .defaultHigh
+        )
+        maximumWidthAnchor = contentView.constrain(
+            .widthAnchor,
+            relatedBy: .lessThanOrEqual,
+            constant: appearance.maximumWidth
+        )
+    }
+
     func buildViews() {
         view.addSubview(dimmerView)
         view.addSubview(contentView)
@@ -91,24 +104,11 @@ private extension SideMenuController {
         dimmerView.constrainEdges()
         rootViewController.view.constrainEdges()
         contentView.constrainEdges(.notTrailing)
-        idealWidthAnchor = contentView.constrain(
-            .widthAnchor,
-            to: view.widthAnchor,
-            multiplier: Constants.idealWidthPercentage,
-            priority: .defaultHigh
-        )
-
-        maximumWidthAnchor = contentView.constrain(
-            .widthAnchor,
-            relatedBy: .lessThanOrEqual,
-            constant: Constants.maximumWidth
-        )
     }
 
     func configureViews() {
         dimmerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapDimmerView)))
-        dimmerView.backgroundColor = UIColor.black
-        dimmerView.alpha = Constants.defaultDimmerOpacity
+        updateAppearance()
 
         contentView.backgroundColor = .systemBackground
         let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(didSwipeToDismiss))
