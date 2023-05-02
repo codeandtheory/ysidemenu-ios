@@ -61,6 +61,7 @@ public class SideMenuController: UIViewController {
     }
 
     internal func didDismiss() {
+        guard appearance.isDismissAllowed else { return }
         dismiss(animated: true)
     }
 }

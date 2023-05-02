@@ -22,7 +22,9 @@ extension SideMenuController {
         public var presentAnimation: Animation
         /// Animation for dismissing the side menu. Default = `.defaultDismiss`.
         public var dismissAnimation: Animation
-
+        /// Whether the menu can be dismissed by swiping left or tapping on the dimmer. Default is `true`.
+        public var isDismissAllowed: Bool
+        
         /// Default appearance
         public static let `default` = Appearance()
 
@@ -33,18 +35,21 @@ extension SideMenuController {
         ///   - idealWidthPercentage: Ideal width for the side menu based on screen width.
         ///   - presentAnimation: Animation for presenting the side menu.
         ///   - dismissAnimation: Animation for dismissing the side menu.
+        ///   - isDismissAllowed: Whether the menu  can be dismissed by swiping left or tapping on the dimmer.
         public init(
             dimmerColor: UIColor = UIColor.black.withAlphaComponent(0.5),
             maximumWidth: CGFloat = 414,
             idealWidthPercentage: CGFloat = 0.8,
             presentAnimation: Animation = .defaultPresent,
-            dismissAnimation: Animation = .defaultDismiss
+            dismissAnimation: Animation = .defaultDismiss,
+            isDismissAllowed: Bool = true
         ) {
             self.dimmerColor = dimmerColor
             self.maximumWidth = maximumWidth
             self.idealWidthPercentage = idealWidthPercentage
             self.presentAnimation = presentAnimation
             self.dismissAnimation = dismissAnimation
+            self.isDismissAllowed = isDismissAllowed
         }
     }
 }
