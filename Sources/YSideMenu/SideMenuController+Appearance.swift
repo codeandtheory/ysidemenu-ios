@@ -18,6 +18,12 @@ extension SideMenuController {
         public var maximumWidth: CGFloat
         /// Ideal width percentage for side menu, related to screen width. Default is `0.8`.
         public var idealWidthPercentage: CGFloat
+        /// Animation duration on menu. Default is `0.3`.
+        public var animationDuration: TimeInterval
+        /// Animation type during presenting. Default is `curveEaseIn`.
+        public var presentAnimationCurve: UIView.AnimationOptions
+        /// Animation type for dimmer. Default is `curveEaseInOut`.
+        public var dimmerAnimationCurve: UIView.AnimationOptions
 
         /// Default appearance
         public static let `default` = Appearance()
@@ -27,14 +33,23 @@ extension SideMenuController {
         ///   - dimmerColor: Color for the dimmer view on side menu.
         ///   - maximumWidth: Maximum width allowed for the side menu.
         ///   - idealWidthPercentage: Ideal width for the side menu based on screen width.
+        ///   - animationDuration: Animation duration for menu sheet. Default is `0.3`.
+        ///   - presentAnimationCurve: Animation during presenting.
+        ///   - dimmerAnimationCurve: Animation during dimmer transition
         public init(
             dimmerColor: UIColor = UIColor.black.withAlphaComponent(0.5),
             maximumWidth: CGFloat = 414,
-            idealWidthPercentage: CGFloat = 0.8
+            idealWidthPercentage: CGFloat = 0.8,
+            animationDuration: TimeInterval = 0.3,
+            presentAnimationCurve: UIView.AnimationOptions = .curveEaseIn,
+            dimmerAnimationCurve: UIView.AnimationOptions = .curveEaseInOut
         ) {
             self.dimmerColor = dimmerColor
             self.maximumWidth = maximumWidth
             self.idealWidthPercentage = idealWidthPercentage
+            self.animationDuration = animationDuration
+            self.presentAnimationCurve = presentAnimationCurve
+            self.dimmerAnimationCurve = dimmerAnimationCurve
         }
     }
 }
