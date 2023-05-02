@@ -78,12 +78,14 @@ private extension SideMenuController {
 
     func updateAppearance() {
         dimmerView.backgroundColor = appearance.dimmerColor
+        idealWidthAnchor?.isActive = false
         idealWidthAnchor = contentView.constrain(
             .widthAnchor,
             to: view.widthAnchor,
             multiplier: appearance.idealWidthPercentage,
             priority: .defaultHigh
         )
+        maximumWidthAnchor?.isActive = false
         maximumWidthAnchor = contentView.constrain(
             .widthAnchor,
             relatedBy: .lessThanOrEqual,
