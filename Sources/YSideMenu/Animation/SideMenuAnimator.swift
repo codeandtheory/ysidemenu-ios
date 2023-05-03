@@ -25,7 +25,7 @@ class SideMenuAnimator: NSObject {
     }
 
     /// Initializes a side menu animator.
-    /// - Parameter sheetViewController: the menu being animated.
+    /// - Parameter sideMenuController: the menu being animated.
     init(sideMenuController: SideMenuController) {
         self.sideMenuViewController = sideMenuController
         super.init()
