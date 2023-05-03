@@ -9,12 +9,13 @@
 import UIKit
 import YCoreUI
 
-/// A view controller  that represents a `SideMenu`.
+/// A view controller  that presents itself as a side menu (AKA hamburger menu)
 public class SideMenuController: UIViewController {
     internal let contentView: UIView = UIView()
     internal var dimmerView: UIView = UIView()
     /// The child view controller to be displayed as a side menu
     public let rootViewController: UIViewController
+    /// Side menu appearance
     public var appearance: Appearance = Appearance.default {
         didSet {
             updateAppearance()
@@ -43,7 +44,7 @@ public class SideMenuController: UIViewController {
         build()
     }
 
-    /// Performing the accessibility escape gesture dismisses the bottom sheet.
+    /// Performing the accessibility escape gesture dismisses the side menu.
     public override func accessibilityPerformEscape() -> Bool {
         didDismiss()
         return true
