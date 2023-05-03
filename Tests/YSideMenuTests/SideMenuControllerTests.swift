@@ -76,6 +76,61 @@ final class SideMenuControllerTests: XCTestCase {
         XCTAssertEqual(sut.dimmerView.backgroundColor, customAppearance.dimmerColor)
         XCTAssertLessThanOrEqual(sut.contentView.bounds.width, customAppearance.maximumWidth)
     }
+
+    func test_presentAnimator_returnsTheCorrectAnimator() throws {
+        let sut = makeSpy(rootViewController: UIViewController())
+        let parent = UIViewController()
+        let animator = try XCTUnwrap(sut.animationController(forPresented: sut, presenting: parent, source: parent))
+        XCTAssertTrue(animator.isKind(of: SideMenuPresentAnimator.self))
+    }
+
+    func test_dismissAnimator_returnsTheCorrectAnimator() throws {
+        let sut = makeSpy(rootViewController: UIViewController())
+        let animator = try XCTUnwrap(sut.animationController(forDismissed: sut))
+        XCTAssertTrue(animator.isKind(of: SideMenuDismissAnimator.self))
+    }
+
+    func test_onDimmer() {
+        let sut = makeSpy(rootViewController: UIViewController())
+
+        XCTAssertFalse(sut.onDimmerTapped)
+        XCTAssertFalse(sut.isDismissed)
+
+        sut.simulateOnDimmerTap()
+
+        XCTAssertTrue(sut.onDimmerTapped)
+        XCTAssertTrue(sut.isDismissed)
+    }
+
+    func test_onSwipeLeft() {
+        let sut = makeSpy(rootViewController: UIViewController())
+        sut.loadViewIfNeeded()
+
+        XCTAssertFalse(sut.onMenuSwiped)
+        XCTAssertFalse(sut.isDismissed)
+
+        sut.simulateSwipeToDismiss()
+
+        XCTAssertTrue(sut.onMenuSwiped)
+        XCTAssertTrue(sut.isDismissed)
+    }
+
+    func test_forbidDismiss() {
+        let sut = makeSpy(rootViewController: UIViewController())
+        sut.appearance.isDismissAllowed = false
+        sut.loadViewIfNeeded()
+
+        XCTAssertFalse(sut.onMenuSwiped)
+        XCTAssertFalse(sut.onDimmerTapped)
+        XCTAssertFalse(sut.isDismissed)
+
+        sut.simulateOnDimmerTap()
+        sut.simulateSwipeToDismiss()
+        _ = sut.accessibilityPerformEscape()
+
+        XCTAssertFalse(sut.onMenuSwiped)
+        XCTAssertFalse(sut.onDimmerTapped)
+    }
 }
 
 private extension SideMenuControllerTests {
@@ -112,11 +167,15 @@ final class SpySideMenuController: SideMenuController {
 
     override func simulateOnDimmerTap() {
         super.simulateOnDimmerTap()
-        onDimmerTapped = true
+        if appearance.isDismissAllowed {
+            onDimmerTapped = true
+        }
     }
 
     override func simulateSwipeToDismiss() {
         super.simulateSwipeToDismiss()
-        onMenuSwiped = true
+        if appearance.isDismissAllowed {
+            onMenuSwiped = true
+        }
     }
 }
