@@ -28,6 +28,8 @@ class SideMenuPresentAnimator: SideMenuAnimator {
             var menuFrame = menu.contentView.frame
             menuFrame.origin.x = -toFinalFrame.maxX
             menu.contentView.frame = menuFrame
+            // lay out menu's subviews prior to first appearance
+            menu.contentView.layoutIfNeeded()
             menu.view.setNeedsLayout()
         }
 

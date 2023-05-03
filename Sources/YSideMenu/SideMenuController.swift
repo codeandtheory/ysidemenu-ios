@@ -66,8 +66,8 @@ public class SideMenuController: UIViewController {
 
 private extension SideMenuController {
     func setupPresentation() {
-        // Modal configuration
-        modalPresentationStyle = .overFullScreen
+        modalPresentationStyle = .custom
+        transitioningDelegate = self
     }
 
     func build() {
