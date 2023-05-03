@@ -18,6 +18,10 @@ extension SideMenuController {
         public var maximumWidth: CGFloat
         /// Ideal width percentage for side menu, related to screen width. Default is `0.8`.
         public var idealWidthPercentage: CGFloat
+        /// Animation for presenting the side menu. Default = `.defaultPresent`.
+        public var presentAnimation: Animation
+        /// Animation for dismissing the side menu. Default = `.defaultDismiss`.
+        public var dismissAnimation: Animation
 
         /// Default appearance
         public static let `default` = Appearance()
@@ -27,14 +31,20 @@ extension SideMenuController {
         ///   - dimmerColor: Color for the dimmer view on side menu.
         ///   - maximumWidth: Maximum width allowed for the side menu.
         ///   - idealWidthPercentage: Ideal width for the side menu based on screen width.
+        ///   - presentAnimation: Animation for presenting the side menu.
+        ///   - dismissAnimation: Animation for dismissing the side menu.
         public init(
             dimmerColor: UIColor = UIColor.black.withAlphaComponent(0.5),
             maximumWidth: CGFloat = 414,
-            idealWidthPercentage: CGFloat = 0.8
+            idealWidthPercentage: CGFloat = 0.8,
+            presentAnimation: Animation = .defaultPresent,
+            dismissAnimation: Animation = .defaultDismiss
         ) {
             self.dimmerColor = dimmerColor
             self.maximumWidth = maximumWidth
             self.idealWidthPercentage = idealWidthPercentage
+            self.presentAnimation = presentAnimation
+            self.dismissAnimation = dismissAnimation
         }
     }
 }
