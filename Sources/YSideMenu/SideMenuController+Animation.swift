@@ -17,4 +17,11 @@ extension SideMenuController: UIViewControllerTransitioningDelegate {
     ) -> UIViewControllerAnimatedTransitioning? {
         SideMenuPresentAnimator(sideMenuController: self)
     }
+
+    /// Returns the animator for dismissing a side menu
+    public func animationController(
+        forDismissed dismissed: UIViewController
+    ) -> UIViewControllerAnimatedTransitioning? {
+        SideMenuDismissAnimator(sideMenuController: self)
+    }
 }
