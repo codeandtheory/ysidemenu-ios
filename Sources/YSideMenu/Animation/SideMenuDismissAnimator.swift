@@ -10,17 +10,19 @@ import UIKit
 
 /// Performs the side menu  dismiss  animation.
 class SideMenuDismissAnimator: SideMenuAnimator {
+    override func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        sideMenuViewController.appearance.dismissAnimation.duration
+    }
+
     override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
-        guard let fromViewController = transitionContext.viewController(forKey: .from),
-              let toViewController = transitionContext.viewController(forKey: .to) else {
+        guard let fromViewController = transitionContext.viewController(forKey: .from) else {
             transitionContext.completeTransition(false)
             return
         }
 
         let menu = sideMenuViewController
-        let toFinalFrame = transitionContext.finalFrame(for: toViewController)
         var menuFrame = menu.contentView.frame
-        menuFrame.origin.x = -toFinalFrame.maxX
+        menuFrame.origin.x = -menuFrame.width
 
         let duration = transitionDuration(using: transitionContext)
 

@@ -38,7 +38,7 @@ final class SideMenuDismissAnimatorTests: XCTestCase {
         RunLoop.current.run(until: Date(timeIntervalSinceNow: 0.01))
         XCTAssertEqual(menuController.dimmerView.alpha, 0)
         XCTAssertEqual(menuController.contentView.alpha, 1)
-        XCTAssertLessThan(menuController.contentView.frame.maxX, context.containerView.bounds.minX)
+        XCTAssertEqual(menuController.contentView.frame.maxX, 0)
     }
 
     func test_animateWithReduceMotion_FadesOut() throws {
@@ -58,9 +58,13 @@ final class SideMenuDismissAnimatorTests: XCTestCase {
         XCTAssertEqual(menuController.contentView.frame.maxX, context.containerView.bounds.minX)
     }
 
-    func test_animateWithoutTo_Fails() throws {
+    func test_animateWithoutFrom_Fails() throws {
         let menuController = makeMenu()
-        let (sut, context) = try makeSUT(menuViewController: menuController, to: nil)
+        let (sut, context) = try makeSUT(
+            menuViewController: menuController,
+            presenting: nil,
+            to: menuController
+        )
 
         XCTAssertFalse(context.wasCompleteCalled)
         sut.animateTransition(using: context)
@@ -73,19 +77,19 @@ final class SideMenuDismissAnimatorTests: XCTestCase {
 private extension SideMenuDismissAnimatorTests {
     func makeSUT(
         menuViewController: SideMenuController,
+        presenting: UIViewController? = UIViewController(),
         to: UIViewController?,
         isReduceMotionEnabled: Bool? = nil,
         file: StaticString = #filePath,
         line: UInt = #line
     ) throws -> (UIViewControllerAnimatedTransitioning, MockAnimationContext) {
-        let main = UIViewController()
         let animator = try XCTUnwrap(
             menuViewController.animationController(
                 forDismissed: menuViewController
             ) as? SideMenuAnimator
         )
         animator.reduceMotionOverride = isReduceMotionEnabled
-        let context = MockAnimationContext(from: main, to: to)
+        let context = MockAnimationContext(from: presenting, to: to)
         trackForMemoryLeak(animator)
         trackForMemoryLeak(context)
         return (animator, context)
