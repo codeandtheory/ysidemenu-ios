@@ -10,6 +10,10 @@ import UIKit
 
 /// Performs the side menu  present animation.
 class SideMenuPresentAnimator: SideMenuAnimator {
+    override func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
+        sideMenuViewController.appearance.presentAnimation.duration
+    }
+
     override func animateTransition(using transitionContext: UIViewControllerContextTransitioning) {
         guard let toViewController = transitionContext.viewController(forKey: .to) else {
             transitionContext.completeTransition(false)
@@ -38,16 +42,12 @@ class SideMenuPresentAnimator: SideMenuAnimator {
         UIView.animate(
             withDuration: duration,
             delay: .zero,
-            options: [.beginFromCurrentState, menu.appearance.dimmerAnimationCurve]
+            options: [.beginFromCurrentState, .curveEaseInOut]
         ) {
             menu.dimmerView.alpha = 1
         }
 
-        UIView.animate(
-            withDuration: duration,
-            delay: .zero,
-            options: [.beginFromCurrentState, menu.appearance.presentAnimationCurve]
-        ) {
+        UIView.animate(with: menu.appearance.presentAnimation) {
             if self.isReduceMotionEnabled {
                 menu.view.alpha = 1
             } else {

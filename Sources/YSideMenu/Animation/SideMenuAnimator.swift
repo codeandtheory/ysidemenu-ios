@@ -34,7 +34,7 @@ class SideMenuAnimator: NSObject {
 
 extension SideMenuAnimator: UIViewControllerAnimatedTransitioning {
     func transitionDuration(using transitionContext: UIViewControllerContextTransitioning?) -> TimeInterval {
-        sideMenuViewController.appearance.animationDuration
+        sideMenuViewController.appearance.presentAnimation.duration
     }
 
     // Override this method and perform the animations

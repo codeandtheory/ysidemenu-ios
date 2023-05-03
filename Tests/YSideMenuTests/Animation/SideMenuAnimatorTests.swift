@@ -23,7 +23,7 @@ final class SideMenuAnimatorTests: XCTestCase {
         let sut = makeSUT(menuController: menuController)
         let context = MockAnimationContext(from: main, to: menuController)
 
-        XCTAssertEqual(sut.transitionDuration(using: context), menuController.appearance.animationDuration)
+        XCTAssertEqual(sut.transitionDuration(using: context), menuController.appearance.presentAnimation.duration)
     }
 
     func test_animate() {
