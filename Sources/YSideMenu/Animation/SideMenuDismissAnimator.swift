@@ -32,11 +32,7 @@ class SideMenuDismissAnimator: SideMenuAnimator {
             menu.dimmerView.alpha = 0
         }
 
-        UIView.animate(
-            withDuration: duration,
-            delay: .zero,
-            options: [.beginFromCurrentState, menu.appearance.dismissAnimationCurve]
-        ) {
+        UIView.animate(with: menu.appearance.dismissAnimation) {
             if self.isReduceMotionEnabled {
                 menu.contentView.alpha = 0
             } else {
