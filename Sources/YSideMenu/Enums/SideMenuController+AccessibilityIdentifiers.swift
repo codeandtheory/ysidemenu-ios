@@ -8,6 +8,6 @@
 
 extension SideMenuController {
     enum AccessibilityIdentifiers {
-        static let dimmerId = "menu.dimmer.close"
+        static let dimmerId = "Menu_Dimmer_Close"
     }
 }

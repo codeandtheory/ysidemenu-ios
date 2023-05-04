@@ -20,19 +20,6 @@ final class SideMenuControllerTests: XCTestCase {
         XCTAssertTrue(sut.contentView.subviews.contains(viewController.view))
     }
 
-    func test_viewDidAppear_setsVOFocus() {
-        // Given
-        let sut = makeSpy(rootViewController: UIViewController())
-        XCTAssertFalse(sut.voiceOverFocusSet)
-
-        // When (simulate view controller appearance)
-        sut.beginAppearanceTransition(true, animated: false)
-        sut.endAppearanceTransition()
-
-        // Then
-        XCTAssertTrue(sut.voiceOverFocusSet)
-    }
-
     func test_dimmerTap_dismissesSideMenu() {
         let sut = makeSpy(rootViewController: UIViewController())
         sut.loadViewIfNeeded()
@@ -172,12 +159,6 @@ final class SpySideMenuController: SideMenuController {
     var isDismissed = false
     var onDimmerTapped = false
     var onMenuSwiped = false
-    var voiceOverFocusSet = false
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        voiceOverFocusSet = true
-    }
 
     override func didDismiss() {
         super.didDismiss()

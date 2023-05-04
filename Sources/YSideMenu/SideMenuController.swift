@@ -24,7 +24,7 @@ public class SideMenuController: UIViewController {
     private var idealWidthAnchor: NSLayoutConstraint?
     private var maximumWidthAnchor: NSLayoutConstraint?
     /// Dimmer tap view
-    let dimmerTapView: UIView = {
+    internal let dimmerTapView: UIView = {
         let view = UIView()
         view.accessibilityTraits = .button
         view.accessibilityLabel = Strings.dimmerAccessibilityLabel.localized
@@ -134,7 +134,7 @@ private extension SideMenuController {
     }
 
     func configureAccessibility() {
-        accessibilityElements = [contentView, dimmerView]
+        accessibilityElements = [contentView, dimmerTapView]
     }
 }
 
