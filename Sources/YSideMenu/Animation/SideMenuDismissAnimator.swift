@@ -34,13 +34,16 @@ class SideMenuDismissAnimator: SideMenuAnimator {
             menu.dimmerView.alpha = 0
         }
 
-        UIView.animate(with: menu.appearance.dismissAnimation) {
+        UIView.animate(
+            with: menu.appearance.dismissAnimation
+        ) {
             if self.isReduceMotionEnabled {
                 menu.contentView.alpha = 0
             } else {
                 menu.contentView.frame = menuFrame
             }
-        } completion: { _ in
+        }
+        completion: { _ in
             if !transitionContext.transitionWasCancelled {
                 fromViewController.view.removeFromSuperview()
             }

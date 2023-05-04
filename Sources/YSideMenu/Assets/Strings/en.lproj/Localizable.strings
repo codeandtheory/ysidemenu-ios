@@ -1,0 +1,9 @@
+/*
+  Localizable.strings
+ YSideMenu
+
+  Created by Caio Coan on 05/03/23.
+  Copyright © 2023 Y Media Labs. All rights reserved.
+*/
+
+"menu.dimmer.close" = "Dismiss";
