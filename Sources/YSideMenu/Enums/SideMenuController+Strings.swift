@@ -11,7 +11,7 @@ import YCoreUI
 
 extension SideMenuController {
     enum Strings: String, Localizable, CaseIterable {
-        case dimmerAccessibilityLabel = "menu.dimmer.close"
+        case dimmerAccessibilityLabel = "Menu_Dimmer_Close"
 
         static var bundle: Bundle { .module }
     }
