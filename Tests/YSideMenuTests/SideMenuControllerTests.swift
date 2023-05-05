@@ -92,14 +92,17 @@ final class SideMenuControllerTests: XCTestCase {
 
     func test_onDimmer() {
         let sut = makeSpy(rootViewController: UIViewController())
-
+        sut.loadViewIfNeeded()
+        
         XCTAssertFalse(sut.onDimmerTapped)
         XCTAssertFalse(sut.isDismissed)
+        XCTAssertTrue(sut.dimmerTapView.isAccessibilityElement)
 
         sut.simulateOnDimmerTap()
 
         XCTAssertTrue(sut.onDimmerTapped)
         XCTAssertTrue(sut.isDismissed)
+        XCTAssertFalse(sut.dimmerTapView.isAccessibilityElement)
     }
 
     func test_onSwipeLeft() {
@@ -120,6 +123,7 @@ final class SideMenuControllerTests: XCTestCase {
         sut.appearance.isDismissAllowed = false
         sut.loadViewIfNeeded()
 
+        XCTAssertFalse(sut.dimmerTapView.isAccessibilityElement)
         XCTAssertFalse(sut.onMenuSwiped)
         XCTAssertFalse(sut.onDimmerTapped)
         XCTAssertFalse(sut.isDismissed)
@@ -130,6 +134,15 @@ final class SideMenuControllerTests: XCTestCase {
 
         XCTAssertFalse(sut.onMenuSwiped)
         XCTAssertFalse(sut.onDimmerTapped)
+    }
+
+    func test_accessibility() {
+        let sut = makeSUT(rootViewController: UIViewController())
+        sut.loadViewIfNeeded()
+
+        XCTAssertTrue(sut.dimmerTapView.isAccessibilityElement)
+        XCTAssertEqual(sut.dimmerTapView.accessibilityIdentifier, SideMenuController.AccessibilityIdentifiers.dimmerId)
+        XCTAssertEqual(sut.dimmerTapView.accessibilityTraits, .button)
     }
 }
 

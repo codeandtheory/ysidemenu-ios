@@ -23,6 +23,14 @@ public class SideMenuController: UIViewController {
     }
     private var idealWidthAnchor: NSLayoutConstraint?
     private var maximumWidthAnchor: NSLayoutConstraint?
+    /// Dimmer tap view
+    internal let dimmerTapView: UIView = {
+        let view = UIView()
+        view.accessibilityTraits = .button
+        view.accessibilityLabel = Strings.dimmerAccessibilityLabel.localized
+        view.accessibilityIdentifier = AccessibilityIdentifiers.dimmerId
+        return view
+    }()
 
     /// :nodoc:
     @available(*, unavailable)
@@ -62,6 +70,7 @@ public class SideMenuController: UIViewController {
 
     internal func didDismiss() {
         guard appearance.isDismissAllowed else { return }
+        dimmerTapView.isAccessibilityElement = false
         dismiss(animated: true)
     }
 }
@@ -79,6 +88,7 @@ private extension SideMenuController {
     }
 
     func updateAppearance() {
+        dimmerTapView.isAccessibilityElement = appearance.isDismissAllowed
         dimmerView.backgroundColor = appearance.dimmerColor
         idealWidthAnchor?.isActive = false
         idealWidthAnchor = contentView.constrain(
@@ -97,6 +107,7 @@ private extension SideMenuController {
 
     func buildViews() {
         view.addSubview(dimmerView)
+        view.addSubview(dimmerTapView)
         view.addSubview(contentView)
         
         addChild(rootViewController)
@@ -106,12 +117,14 @@ private extension SideMenuController {
 
     func buildConstraints() {
         dimmerView.constrainEdges()
+        dimmerTapView.constrainEdges(.notLeading)
+        dimmerTapView.constrain(.leadingAnchor, to: contentView.trailingAnchor)
         rootViewController.view.constrainEdges()
         contentView.constrainEdges(.notTrailing)
     }
 
     func configureViews() {
-        dimmerView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapDimmerView)))
+        dimmerTapView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(didTapDimmerView)))
         updateAppearance()
 
         contentView.backgroundColor = .systemBackground

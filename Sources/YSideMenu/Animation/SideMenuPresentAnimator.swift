@@ -47,13 +47,16 @@ class SideMenuPresentAnimator: SideMenuAnimator {
             menu.dimmerView.alpha = 1
         }
 
-        UIView.animate(with: menu.appearance.presentAnimation) {
+        UIView.animate(
+            with: menu.appearance.presentAnimation
+        ) {
             if self.isReduceMotionEnabled {
                 menu.view.alpha = 1
             } else {
                 menu.view.layoutIfNeeded()
             }
-        } completion: { _ in
+        }
+        completion: { _ in
             transitionContext.completeTransition(!transitionContext.transitionWasCancelled)
         }
     }
