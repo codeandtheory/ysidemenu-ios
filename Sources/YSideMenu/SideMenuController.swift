@@ -70,6 +70,7 @@ public class SideMenuController: UIViewController {
 
     internal func didDismiss() {
         guard appearance.isDismissAllowed else { return }
+        dimmerTapView.isAccessibilityElement = false
         dismiss(animated: true)
     }
 }
@@ -84,7 +85,6 @@ private extension SideMenuController {
         buildViews()
         buildConstraints()
         configureViews()
-        configureAccessibility()
     }
 
     func updateAppearance() {
@@ -131,10 +131,6 @@ private extension SideMenuController {
         let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(didSwipeToDismiss))
         swipeGesture.direction = .left
         contentView.addGestureRecognizer(swipeGesture)
-    }
-
-    func configureAccessibility() {
-        accessibilityElements = [contentView, dimmerTapView]
     }
 }
 
