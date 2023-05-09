@@ -53,7 +53,7 @@ You can customize the appearance of the side menu by setting the `appearance` pr
 `idealWidthPercentage`: the ideal width of the side menu as a percentage of the width of the screen (default is 0.75).
 `maximumWidth`: the maximum width of the side menu in points (default is 300).
 `isDismissAllowed`: a Boolean value that indicates whether the user can dismiss the side menu by tapping outside of it or by swiping it to the left (default is true).
-`presentAnimation`: present animation
+`presentAnimation`: present animation 
 `dismissAnimation`: dismiss animation
 
 Dependencies
