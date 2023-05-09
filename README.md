@@ -13,6 +13,49 @@ Documentation is automatically generated from source code comments and rendered 
 Usage
 ----------
 
+To use `YSideMenu` in your app, you need to create an instance of `SideMenuController`, passing a child view controller as a parameter. Here is an example of how to create and present a side menu:
+```swift
+import YSideMenu
+
+let sideMenuController = SideMenuController(rootViewController: contentViewController)
+present(sideMenuController, animated: true, completion: nil)
+```
+
+### Customization
+`SideMenuController` has an `appearance` property of type `Appearance`.
+
+`Appearance` lets you customize how the bosi menu both appears and behaves. You can customize:
+
+```swift
+let contentViewController = ContentViewController()
+let sideMenuController = SideMenuController(rootViewController: menuViewController)
+sideMenuController.appearance = .init(
+    dimmerColor: UIColor.black.withAlphaComponent(0.5),
+    idealWidthPercentage: 0.75,
+    maximumWidth: 300,
+    isDismissAllowed: true
+)
+```
+
+```swift
+appearance.presentAnimation = Animation(
+    duration: 0.4, 
+    curve: .spring(damping: 0.6, velocity: 0.4)
+)
+
+// Present the menu with a spring animation.
+present(sheet, animated: true)
+```
+
+You can customize the appearance of the side menu by setting the `appearance` property of the `SideMenuController`. The `Appearance` struct contains the following properties:
+
+`dimmerColor`: the color of the dimmer view that is displayed behind the side menu (default is black with an alpha of 0.3).
+`idealWidthPercentage`: the ideal width of the side menu as a percentage of the width of the screen (default is 0.75).
+`maximumWidth`: the maximum width of the side menu in points (default is 300).
+`isDismissAllowed`: a Boolean value that indicates whether the user can dismiss the side menu by tapping outside of it or by swiping it to the left (default is true).
+`presentAnimation`: present animation
+`dismissAnimation`: dismiss animation
+
 Dependencies
 ----------
 
