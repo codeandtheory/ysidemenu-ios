@@ -24,7 +24,7 @@ present(sideMenuController, animated: true, completion: nil)
 ### Customization
 `SideMenuController` has an `appearance` property of type `Appearance`.
 
-`Appearance` lets you customize how the bosi menu both appears and behaves. You can customize:
+`Appearance` lets you customize how the side menu both appears and behaves. You can customize:
 
 ```swift
 let contentViewController = ContentViewController()
